@@ -5,11 +5,11 @@ defmodule Servy.Handler do
     |> rewrite_path
     |> log
     |> route
+    |> emojify
     |> track
     |> format_response
   end
 
-  @spec track(any) :: any
   def track(%{status: 404, path: path} = conv) do
     IO.puts("Warning: #{path} is on the loose!")
     conv
@@ -19,6 +19,10 @@ defmodule Servy.Handler do
 
   def rewrite_path(%{path: "/wildlife"} = conv) do
     %{conv | path: "/wildthings"}
+  end
+
+  def rewrite_path(%{path: "/bears?=id" <> id} = conv) do
+    %{conv | path: "/bears/#{id}"}
   end
 
   def rewrite_path(conv), do: conv
@@ -47,9 +51,19 @@ defmodule Servy.Handler do
     %{conv | status: 200, resp_body: "Bear #{id}"}
   end
 
+  def route(%{method: "DELETE", path: "/bears/" <> _id} = conv) do
+    %{conv | status: 403, resp_body: "Bears are not allowed to be deleted!"}
+  end
+
   def route(%{path: path} = conv) do
     %{conv | status: 404, resp_body: "No #{path} here!"}
   end
+
+  def emojify(%{status: 200} = conv) do
+    %{conv | resp_body: ":) " <> conv.resp_body <> " :) "}
+  end
+
+  def emojify(conv), do: conv
 
   def format_response(conv) do
     """
@@ -123,6 +137,18 @@ IO.puts(response)
 
 request = """
 GET /wildlife HTTP/1.1
+Host: example.com
+User-Agent: ExampleBrowser/1.0
+Accept: */*
+
+"""
+
+response = Servy.Handler.handle(request)
+
+IO.puts(response)
+
+request = """
+DELETE /bears/1 HTTP/1.1
 Host: example.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
