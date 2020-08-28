@@ -24,6 +24,20 @@ defmodule Tools.Recurse do
     current_list |> Enum.reverse()
   end
 
+  def duplicate(s, times) do
+    duplicate(s, s, times)
+  end
+
+  defp duplicate(_, _, times) when times < 1,  do: ""
+  defp duplicate(_, s, times) when times == 1, do: s
+  defp duplicate(orig, s, times) when times > 1, do: duplicate(orig, s <> orig, times - 1)
+
+  def my_map([head|tail], f) do
+    [f.(head) | my_map(tail, f)]
+  end
+
+  def my_map([], _f), do: []
+
 end
 
 IO.puts Tools.Recurse.sum([1,2,3,4,5], 0)
@@ -32,3 +46,10 @@ IO.inspect Tools.Recurse.triple([1,2,3,4])
 
 IO.puts "Tail optimized:"
 IO.inspect Tools.Recurse.triple([1,2,3,4], [])
+
+IO.puts Tools.Recurse.duplicate("AQ", -1)
+IO.puts Tools.Recurse.duplicate("AQ", 0)
+IO.puts Tools.Recurse.duplicate("AQ", 1)
+IO.puts Tools.Recurse.duplicate("AQ", 4)
+
+IO.inspect Tools.Recurse.my_map([1,2,3,4,5], &(&1 * 3))
