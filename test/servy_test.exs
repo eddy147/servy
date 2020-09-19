@@ -66,4 +66,12 @@ defmodule Test.Servy do
   test "cat lovers" do
     assert ["Becky"] == Exercises.Comprehensions.getCatLovers()
   end
+
+  test "dog lovers" do
+    assert ["Betty", "Bob"] == Exercises.Comprehensions.getDogLovers()
+  end
+
+  test "calculate area" do
+    assert 200 = Exercises.Comprehensions.getArea()
+  end
 end
