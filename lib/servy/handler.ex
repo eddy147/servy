@@ -38,6 +38,10 @@ defmodule Servy.Handler do
     BearController.create(conv, conv.params)
   end
 
+  def route(%Conv{ method: "DELETE", path: "/bears/" <> _id } = conv) do
+    %{ conv | status: 403, resp_body: "Not allowed to delete bears!" }
+  end
+
   def route(%Conv{method: "GET", path: "/about"} = conv) do
       @pages_path
       |> Path.join("about.html")
@@ -62,12 +66,13 @@ defmodule Servy.Handler do
   end
 
   def format_response(%Conv{} = conv) do
+    IO.inspect(conv.resp_body)
     """
     HTTP/1.1 #{Conv.full_status(conv)}
     Content-Type: text/html
     Content-Length: #{String.length(conv.resp_body)}
     #{conv.resp_body}
-    
+
     """
   end
 

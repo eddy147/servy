@@ -23,4 +23,9 @@ defmodule Servy.BearController do
               resp_body: "Created a #{type} bear named #{name}!" }
   end
 
+  def delete(conv, %{"id" => id}) do
+    bear = Wildthings.get_bear(id)
+    %{ conv | status: 401, resp_body: B}
+  end
+
 end
