@@ -18,11 +18,16 @@ defmodule Servy.Handler do
     |> log
     |> route
     |> track
+    |> put_content_length
     |> format_response
   end
 
   def route(%Conv{ method: "GET", path: "/wildthings" } = conv) do
     %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
+  end
+
+  def route(%Conv{ method: "GET", path: "/api/bears" } = conv) do
+    Servy.Api.BearController.index(conv)
   end
 
   def route(%Conv{ method: "GET", path: "/bears" } = conv) do
@@ -36,10 +41,6 @@ defmodule Servy.Handler do
 
   def route(%Conv{method: "POST", path: "/bears"} = conv) do
     BearController.create(conv, conv.params)
-  end
-
-  def route(%Conv{ method: "DELETE", path: "/bears/" <> _id } = conv) do
-    %{ conv | status: 403, resp_body: "Not allowed to delete bears!" }
   end
 
   def route(%Conv{method: "GET", path: "/about"} = conv) do
@@ -65,14 +66,19 @@ defmodule Servy.Handler do
     %{ conv | status: 500, resp_body: "File error: #{reason}" }
   end
 
-  def format_response(%Conv{} = conv) do
-    IO.inspect(conv.resp_body)
-    """
-    HTTP/1.1 #{Conv.full_status(conv)}
-    Content-Type: text/html
-    Content-Length: #{String.length(conv.resp_body)}
-    #{conv.resp_body}
+  def put_content_length(conv) do
+    headers = Map.put(conv.resp_headers, "Content-Length", String.length(conv.resp_body))
+    IO.inspect(headers)
+    %{ conv | resp_headers: headers }
+  end
 
+  def format_response(%Conv{} = conv) do
+    """
+    HTTP/1.1 #{Conv.full_status(conv)}\r
+    Content-Type: #{conv.resp_headers["Content-Type"]}\r
+    Content-Length: #{conv.resp_headers["Content-Length"]}\r
+    \r
+    #{conv.resp_body}
     """
   end
 
