@@ -1,4 +1,4 @@
-defmodule ParserTest do
+defmodule Servy.Exercises.ParserTest do
   use ExUnit.Case
   doctest Servy.Parser
 

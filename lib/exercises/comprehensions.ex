@@ -1,4 +1,4 @@
-defmodule Exercises.Comprehensions do
+defmodule Servy.Exercises.Comprehensions do
   @prefs  [{"Betty", :dog}, {"Bob", :dog}, {"Becky", :cat}]
 
   @style %{"width" => 10, "height" => 20, "border" => "2px"}

@@ -1,4 +1,4 @@
-defmodule HandlerTest do
+defmodule Servy.Exercises.HandlerTest do
   use ExUnit.Case
 
   import Servy.Handler, only: [handle: 1]
