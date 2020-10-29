@@ -263,6 +263,19 @@ defmodule Test.Servy.Handler do
     assert remove_whitespace(response) == remove_whitespace(expected_response)
   end
 
+  test "GET /sensors" do
+    request = """
+    GET /sensors HTTP/1.1\r
+    Host: example.com\r
+    User-Agent: ExampleBrowser/1.0\r
+    Accept: */*\r
+    \r
+    """
+
+    response = handle(request)
+    IO.inspect response
+  end
+
   defp remove_whitespace(text) do
     String.replace(text, ~r{\s}, "")
   end
