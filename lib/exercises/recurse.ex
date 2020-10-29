@@ -1,4 +1,4 @@
-defmodule Tools.Recurse do
+defmodule Servy.Exercises.Recurse do
 
   def sum([head | tail], amount) do
     amount = amount + head
@@ -39,17 +39,3 @@ defmodule Tools.Recurse do
   def my_map([], _f), do: []
 
 end
-
-IO.puts Tools.Recurse.sum([1,2,3,4,5], 0)
-
-IO.inspect Tools.Recurse.triple([1,2,3,4])
-
-IO.puts "Tail optimized:"
-IO.inspect Tools.Recurse.triple([1,2,3,4], [])
-
-IO.puts Tools.Recurse.duplicate("AQ", -1)
-IO.puts Tools.Recurse.duplicate("AQ", 0)
-IO.puts Tools.Recurse.duplicate("AQ", 1)
-IO.puts Tools.Recurse.duplicate("AQ", 4)
-
-IO.inspect Tools.Recurse.my_map([1,2,3,4,5], &(&1 * 3))
