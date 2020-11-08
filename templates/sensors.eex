@@ -1,0 +1,10 @@
+<h1>Snapshots</h1>
+
+<%= for snapshot <- snapshots do %>
+<div><img src="<%= snapshot %>" alt="<%= snapshot %>" /></div>
+<% end %>
+
+<h1>Location</h1>
+<p>
+<%= inspect location %>
+</p>
