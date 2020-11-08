@@ -2,6 +2,7 @@ defmodule Servy.Handler do
   @moduledoc "Handles HTTP requests."
 
   alias Servy.Conv
+  alias Servy.FourOhFourCounter
   alias Servy.BearController
   alias Servy.PledgeController
   alias Servy.VideoCam
@@ -21,6 +22,12 @@ defmodule Servy.Handler do
     |> route
     |> track
     |> format_response
+  end
+
+  def route(%Conv{method: "GET", path: "/404s"} = conv) do
+    counts = Servy.FourOhFourCounter.get_counts()
+
+    %{ conv | status: 200, resp_body: inspect counts }
   end
 
   def route(%Conv{method: "POST", path: "/pledges"} = conv) do
