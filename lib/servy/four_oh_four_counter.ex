@@ -46,17 +46,17 @@ defmodule Servy.FourOhFourCounter do
   end
 end
 
-alias Servy.FourOhFourCounter
+# alias Servy.FourOhFourCounter
 
-pid = FourOhFourCounter.start()
+# pid = FourOhFourCounter.start()
 
-IO.inspect FourOhFourCounter.bump_count("/bla")
-IO.inspect FourOhFourCounter.bump_count("/yoo")
-IO.inspect FourOhFourCounter.bump_count("/bla")
-IO.inspect FourOhFourCounter.bump_count("/bla")
-IO.inspect FourOhFourCounter.bump_count("/yoooo")
-IO.inspect FourOhFourCounter.bump_count("/fun")
-IO.inspect FourOhFourCounter.bump_count("/yoo")
+# IO.inspect FourOhFourCounter.bump_count("/bla")
+# IO.inspect FourOhFourCounter.bump_count("/yoo")
+# IO.inspect FourOhFourCounter.bump_count("/bla")
+# IO.inspect FourOhFourCounter.bump_count("/bla")
+# IO.inspect FourOhFourCounter.bump_count("/yoooo")
+# IO.inspect FourOhFourCounter.bump_count("/fun")
+# IO.inspect FourOhFourCounter.bump_count("/yoo")
 
-IO.inspect FourOhFourCounter.get_count("/bla")
-IO.inspect FourOhFourCounter.get_counts
+# IO.inspect FourOhFourCounter.get_count("/bla")
+# IO.inspect FourOhFourCounter.get_counts
