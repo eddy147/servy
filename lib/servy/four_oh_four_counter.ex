@@ -2,55 +2,61 @@ defmodule Servy.FourOhFourCounter do
 
   @name :four_oh_four_counter
 
-  def start(initial_state \\ %{}) do
-    IO.puts("Starting 404 Server...")
-    pid = spawn(__MODULE__, :listen_loop, [initial_state])
-    Process.register(pid, @name)
-    pid
+  alias Servy.GenericServer
+
+  # Client Interface
+
+  def start do
+    IO.puts "Starting the 404 counter..."
+    GenericServer.start(__MODULE__, %{}, @name)
   end
 
-  def bump_count(url) do
-    send(@name, {self(), :bump_count, url})
-
-    receive do
-      {:response, count} ->
-        count
-    end
+  def bump_count(path) do
+    GenericServer.call(@name, {:bump_count, path})
   end
 
-  def get_count(url) do
-    send(@name, {self(), :get_count, url})
-
-    receive do
-      {:response, count} ->
-        count
-    end
+  def get_count(path) do
+    GenericServer.call(@name, {:get_count, path})
   end
 
-  def get_counts() do
-    send(@name, {self(), :get_counts})
-
-    receive do
-      {:response, state} ->
-        state
-    end
+  def get_counts do
+    GenericServer.call(@name, :get_counts)
   end
 
-  def listen_loop(state) do
-    receive do
-      {sender, :bump_count, url} ->
-        new_state = Map.update(state, url, 1, &(&1 + 1))
-        send(sender, {:response, :ok})
-        listen_loop(new_state)
-      {sender, :get_count, url} ->
-        send(sender, {:response, Map.get(state, url, 0)})
-        listen_loop(state)
-      {sender, :get_counts} ->
-        send(sender, {:response, state})
-        listen_loop(state)
-      unexpected ->
-        IO.puts "Unexpected message: #{inspect unexpected}"
-        listen_loop(state)
-    end
+  def reset do
+    GenericServer.cast @name, :reset
+  end
+
+  # Server callbacks
+  def handle_call({:bump_count, path}, state) do
+    new_state = Map.update(state, path, 1, &(&1 + 1))
+    {:ok, new_state}
+  end
+
+  def handle_call({:get_count, path}, state) do
+    {Map.get(state, path, 0), state}
+  end
+
+  def handle_call(:get_counts, state) do
+    {:ok, state}
+  end
+
+  def handle_cast(:reset, _state) do
+    %{}
   end
 end
+
+alias Servy.FourOhFourCounter
+
+pid = FourOhFourCounter.start()
+
+IO.inspect FourOhFourCounter.bump_count("/bla")
+IO.inspect FourOhFourCounter.bump_count("/yoo")
+IO.inspect FourOhFourCounter.bump_count("/bla")
+IO.inspect FourOhFourCounter.bump_count("/bla")
+IO.inspect FourOhFourCounter.bump_count("/yoooo")
+IO.inspect FourOhFourCounter.bump_count("/fun")
+IO.inspect FourOhFourCounter.bump_count("/yoo")
+
+IO.inspect FourOhFourCounter.get_count("/bla")
+IO.inspect FourOhFourCounter.get_counts
