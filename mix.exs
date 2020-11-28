@@ -5,7 +5,7 @@ defmodule Servy.Mixfile do
     [
       app: :servy,
       version: "0.1.0",
-      elixir: "~> 1.5",
+      elixir: "~> 1.11",
       start_permanent: Mix.env == :prod,
       deps: deps()
     ]
@@ -14,7 +14,10 @@ defmodule Servy.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger]
+      extra_applications: [:logger, :eex],
+      #this will be started, you can choose any module
+      mod: {Servy, []},
+      env: [port: 3000]
     ]
   end
 

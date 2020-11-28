@@ -41,7 +41,7 @@ defmodule Servy.PledgeServerHandRolled do
 
   def start do
     IO.puts "Starting the pledge server..."
-    GenericServer.start(__MODULE__, [], @name)
+    GenericServer.start(__MODULE__, fetch_recent_pledges_from_service(), @name)
   end
 
   def create_pledge(name, amount) do

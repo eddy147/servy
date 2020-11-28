@@ -4,8 +4,7 @@ defmodule Servy.Handler do
 
   alias Servy.Conv
   alias Servy.BearController
-  alias Servy.VideoCam
-  
+
   @pages_path Path.expand("../../pages", __DIR__)
 
   import Servy.Plugins, only: [rewrite_path: 1, log: 1, track: 1]
@@ -13,11 +12,11 @@ defmodule Servy.Handler do
 
   @doc "Transforms the request into a response."
   def handle(request) do
-    request 
+    request
     |> parse
     |> rewrite_path
-    |> log 
-    |> route 
+    |> log
+    |> route
     |> track
     |> format_response
   end
@@ -29,7 +28,7 @@ defmodule Servy.Handler do
   def route(%Conv{method: "GET", path: "/pledges"} = conv) do
     Servy.PledgeController.index(conv)
   end
-  
+
   def route(%Conv{ method: "GET", path: "/sensors" } = conv) do
     sensor_data = Servy.SensorServer.get_sensor_data()
 
@@ -42,12 +41,12 @@ defmodule Servy.Handler do
 
   def route(%Conv{ method: "GET", path: "/hibernate/" <> time } = conv) do
     time |> String.to_integer |> :timer.sleep
-    
-    %{ conv | status: 200, resp_body: "Awake!" }          
+
+    %{ conv | status: 200, resp_body: "Awake!" }
   end
 
   def route(%Conv{ method: "GET", path: "/wildthings" } = conv) do
-    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }          
+    %{ conv | status: 200, resp_body: "Bears, Lions, Tigers" }
   end
 
   def route(%Conv{ method: "GET", path: "/api/bears" } = conv) do
@@ -101,4 +100,3 @@ defmodule Servy.Handler do
   end
 
 end
-
